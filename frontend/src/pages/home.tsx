@@ -1,4 +1,5 @@
 import reactLogo from '/src/assets/react.svg'
+import { Link } from 'react-router-dom'
 
 function Home() {
 
@@ -13,9 +14,10 @@ function Home() {
             <div className="card">
                 Simplicity at its best
             </div>
-            <p className="read-the-docs">
-                Click on the Vite and React logos to learn more
-            </p>
+            <button className="getting-started-button">
+                <Link to="/apply">Getting started!</Link>
+            </button>
+            
         </>
     )
 }

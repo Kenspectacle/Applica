@@ -35,9 +35,13 @@
 .card {
   padding: 2em;
 }
-
-.read-the-docs {
-  color: #888;
+.getting-started-button{
+  background-color: #000;
+  
+}
+.getting-started-button a {
+  color: #FFF;
+  
 }
 
 /* App Layout */
@@ -114,11 +118,13 @@
 }
 
 .nav-links li a:hover {
-  background-color: #34495e;
+  background-color: #000;
+  color: #FFF;
 }
 
 .nav-links li.active a {
-  background-color: #3498db;
+  background-color: #000;
+  color: #FFF;
 }
 
 /* Page Components */
