@@ -193,6 +193,99 @@ button[type="submit"]:hover {
   color: #7f8c8d;
 }
 
+/* Application Form */
+.apply-page {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.application-form {
+  background-color: #f8f9fa;
+  padding: 2rem;
+  border-radius: 8px;
+  margin-top: 2rem;
+}
+
+.form-section {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.form-section:last-of-type {
+  border-bottom: none;
+}
+
+.form-section h2 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e9ecef;
+}
+
+.submit-btn {
+  background-color: #27ae60;
+  color: white;
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.submit-btn:hover {
+  background-color: #229954;
+}
+
+.reset-btn {
+  background-color: #95a5a6;
+  color: white;
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.reset-btn:hover {
+  background-color: #7f8c8d;
+}
+
+/* File input styling */
+input[type="file"] {
+  padding: 0.5rem;
+  border: 2px dashed #ddd;
+  border-radius: 4px;
+  background-color: white;
+}
+
+input[type="file"]:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+small {
+  color: #7f8c8d;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .nav-links {
@@ -206,5 +299,18 @@ button[type="submit"]:hover {
   
   .main-content {
     padding: 15px;
+  }
+
+  /* Responsive adjustments for apply form */
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .application-form {
+    padding: 1rem;
   }
 }

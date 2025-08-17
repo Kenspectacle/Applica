@@ -19,6 +19,9 @@ function Navigation() {
         <li className={isActive('/dashboard') ? 'active' : ''}>
           <Link to="/dashboard">Dashboard</Link>
         </li>
+        <li className={isActive('/apply') ? 'active' : ''}>
+          <Link to="/apply">Apply</Link>
+        </li>
         <li className={isActive('/about') ? 'active' : ''}>
           <Link to="/about">About</Link>
         </li>

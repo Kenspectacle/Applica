@@ -5,6 +5,7 @@ import Home from './pages/home'
 import Dashboard from './pages/dashboard'
 import About from './pages/about'
 import Contact from './pages/contact'
+import Apply from './pages/apply'
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/apply" element={<Apply />} />
         </Routes>
       </main>
     </div>
