@@ -10,12 +10,12 @@ function Navigation() {
   return (
     <nav className="navigation">
       <div className="nav-brand">
-        <Link to="/">Job Collector</Link>
+        <Link to="/"><img className="logo" src="/src/assets/Applica.png" alt="Applica Logo" /></Link>
+      </div>
+      <div className="nav-center">
+        <h2 className="website-header-text">Unified Job Application</h2>
       </div>
       <ul className="nav-links">
-        <li className={isActive('/') ? 'active' : ''}>
-          <Link to="/">Home</Link>
-        </li>
         <li className={isActive('/dashboard') ? 'active' : ''}>
           <Link to="/dashboard">Dashboard</Link>
         </li>
