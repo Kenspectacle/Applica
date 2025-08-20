@@ -6,6 +6,7 @@ import Dashboard from './pages/dashboard'
 import About from './pages/about'
 import Contact from './pages/contact'
 import Apply from './pages/apply'
+import { HelloGraphQL } from './components/HelloGraphQL'
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/apply" element={<Apply />} />
+          <Route path="/test-graphql" element={<HelloGraphQL />} />
         </Routes>
       </main>
     </div>
