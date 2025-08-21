@@ -2,6 +2,40 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Job {
+  id: ID!
+  role: String!
+  location: String!
+  description: String!
+  isArchived: Boolean!
+}
+
 type Query {
   hello: String!
+  jobs: [Job!]!
+  activeJobs: [Job!]!
+  job(id: String!): Job!
+  jobsByLocation(location: String!): [Job!]!
+  searchJobs(roleKeyword: String!): [Job!]!
+}
+
+type Mutation {
+  createJob(createJobInput: CreateJobInput!): Job!
+  updateJob(id: String!, updateJobInput: UpdateJobInput!): Job!
+  archiveJob(id: String!): Job!
+  deleteJob(id: String!): Boolean!
+}
+
+input CreateJobInput {
+  role: String!
+  location: String!
+  description: String!
+  isArchived: Boolean
+}
+
+input UpdateJobInput {
+  role: String
+  location: String
+  description: String
+  isArchived: Boolean
 }
