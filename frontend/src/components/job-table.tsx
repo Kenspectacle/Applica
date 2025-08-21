@@ -1,5 +1,5 @@
 import { useQuery, gql } from '@apollo/client';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { dbDateToRealDate } from '../utils/date-helpers';
 import { Search, ChevronUp, ChevronDown } from 'lucide-react';
 
@@ -26,8 +26,8 @@ interface Job {
 }
 
 interface SortIconProps {
-    isSortable?: boolean;
-    direction?: 'asc' | 'desc' | '';
+    currentSortField: string;
+    direction?: 'asc' | 'desc';
 }
 
 function JobTable() {
@@ -35,17 +35,87 @@ function JobTable() {
     const jobs: Job[] = data?.allJobs || [];
 
     const [jobSearch, setJobSearch] = useState<string>('');
+    const [activeSortTab, setActiveSortTab] = useState<string>('');
+    const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
 
     const handleJobSearchChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         setJobSearch(event.target.value);
       };
-
-    const SortIcon: React.FC<SortIconProps> = ({ isSortable = true, direction }) => {
-        if (!isSortable) {
-            return <ChevronUp className="sort-icon sort-icon-inactive" />;
+    
+      const handleSort = (field: string): void => {
+        if (activeSortTab === field) {
+            // Toggle direction if same field
+            setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+        } else {
+            // New field, default to ascending
+            setActiveSortTab(field);
+            setSortDirection('desc');
         }
-        return direction === 'asc' ? 
+    };
+
+    // Filtered and sorted jobs using useMemo for performance
+    const filteredAndSortedJobs = useMemo(() => {
+        let filtered = jobs.filter(job => {
+            const searchTerm = jobSearch.toLowerCase();
+            return (
+                job.role.toLowerCase().includes(searchTerm) ||
+                job.location.toLowerCase().includes(searchTerm) ||
+                job.description.toLowerCase().includes(searchTerm) ||
+                job.id.toLowerCase().includes(searchTerm)
+            );
+        });
+
+        if (activeSortTab) {
+            filtered.sort((a, b) => {
+                let aValue: any;
+                let bValue: any;
+
+                switch (activeSortTab) {
+                    case 'id':
+                        aValue = a.id;
+                        bValue = b.id;
+                        break;
+                    case 'title':
+                        aValue = a.role;
+                        bValue = b.role;
+                        break;
+                    case 'location':
+                        aValue = a.location;
+                        bValue = b.location;
+                        break;
+                    case 'posted':
+                        aValue = dbDateToRealDate(a.creationDate);
+                        bValue = dbDateToRealDate(b.creationDate);
+                        break;
+                    default:
+                        return 0;
+                }
+
+                // Handle string comparison
+                if (typeof aValue === 'string' && typeof bValue === 'string') {
+                    aValue = aValue.toLowerCase();
+                    bValue = bValue.toLowerCase();
+                }
+
+                if (aValue < bValue) {
+                    return sortDirection === 'asc' ? -1 : 1;
+                }
+                if (aValue > bValue) {
+                    return sortDirection === 'asc' ? 1 : -1;
+                }
+                return 0;
+            });
+        }
+
+        return filtered;
+    }, [jobs, jobSearch, activeSortTab, sortDirection]);
+
+    const SortIcon: React.FC<SortIconProps> = ({ currentSortField }) => {
+        if (currentSortField !== activeSortTab) {
+            return <ChevronDown className="sort-icon sort-icon-inactive" />;
+        }
+        return sortDirection === 'asc' ? 
             <ChevronUp className="sort-icon sort-icon-active" /> : 
             <ChevronDown className="sort-icon sort-icon-active" />;
     };
@@ -71,42 +141,46 @@ function JobTable() {
                 <tr>
                   <th 
                     className="sortable-header"
+                    onClick={() => handleSort('id')}
                   >
                     <div className="header-content">
                       <span>ID</span>
-                      <SortIcon isSortable={false} />
+                      <SortIcon currentSortField="id" />
                     </div>
                   </th>
                   <th 
                     className="sortable-header"
+                    onClick={() => handleSort('title')}
                   >
                     <div className="header-content">
                       <span>Job Title</span>
-                      <SortIcon direction={'desc'} />
+                      <SortIcon currentSortField="title" />
                     </div>
                   </th>
                   <th 
                     className="sortable-header"
+                    onClick={() => handleSort('location')}
                   >
                     <div className="header-content">
                       <span>Location</span>
-                      <SortIcon direction={'desc'} />
+                      <SortIcon currentSortField="location" />
                     </div>
                   </th>
                   <th>Description</th>
                   <th 
                     className="sortable-header"
+                    onClick={() => handleSort('posted')}
                   >
                     <div className="header-content">
                       <span>Posted</span>
-                      <SortIcon direction={'desc'} />
+                      <SortIcon currentSortField="posted" />
                     </div>
                   </th>
                   <th>Status</th>
                 </tr>
               </thead>
               <tbody>
-                {jobs.map((job: Job) => (
+                {filteredAndSortedJobs.map((job: Job) => (
                   <tr key={job.id}>
                     <td>{job.id}</td>
                     <td className="job-title">{job.role}</td>
