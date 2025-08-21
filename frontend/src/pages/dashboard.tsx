@@ -1,20 +1,17 @@
 import { Search, ChevronUp, ChevronDown, Eye, Download } from 'lucide-react';
-import { useState, useMemo } from 'react';
-import { useQuery, gql } from '@apollo/client';
-import { format, fromUnixTime } from 'date-fns';
+import { useState } from 'react';
+import JobTable from '../components/job-table';
 
-const GET_JOBS = gql`
-  query GetAllJobs {
-    allJobs {
-      id
-      role
-      location
-      description
-      isArchived
-      creationDate
-    }
-  }
-`;
+
+interface SortConfig {
+  field: string;
+  direction: 'asc' | 'desc' | '';
+}
+
+interface SortIconProps {
+  field: string;
+  currentSort: SortConfig;
+}
 
 interface JobApplication {
   id: number;
@@ -27,32 +24,7 @@ interface JobApplication {
   resume: string;
 }
 
-interface Job {
-  id: string;
-  role: string;
-  location: string;
-  description: string;
-  isArchived: boolean;
-  creationDate: string;
-}
-
-interface SortConfig {
-  field: string;
-  direction: 'asc' | 'desc' | '';
-}
-
-interface SortIconProps {
-  field: string;
-  currentSort: SortConfig;
-}
-
-
 function Dashboard() {
-  const { data } = useQuery(GET_JOBS);
-
-  const jobs: Job[] = data?.allJobs || [];
-  console.log(jobs);
-
   // Sample data for job applications
   const [jobApplications] = useState([
     {
@@ -87,115 +59,6 @@ function Dashboard() {
     }
   ]);
 
-
-
-  // State for filtering and sorting
-  const [applicationSearch, setApplicationSearch] = useState<string>('');
-  const [jobSearch, setJobSearch] = useState<string>('');
-  const [applicationSort, setApplicationSort] = useState<SortConfig>({ field: '', direction: '' });
-  const [jobSort, setJobSort] = useState<SortConfig>({ field: '', direction: '' });
-
-  // Filter and sort job applications
-  const filteredApplications = useMemo(() => {
-    let filtered = jobApplications.filter(app =>
-      app.firstName.toLowerCase().includes(applicationSearch.toLowerCase()) ||
-      app.lastName.toLowerCase().includes(applicationSearch.toLowerCase()) ||
-      app.email.toLowerCase().includes(applicationSearch.toLowerCase()) ||
-      app.jobPosition.toLowerCase().includes(applicationSearch.toLowerCase())
-    );
-
-    if (applicationSort.field) {
-      filtered.sort((a, b) => {
-        const aValue = a[applicationSort.field as keyof JobApplication];
-        const bValue = b[applicationSort.field as keyof JobApplication];
-        
-        // Handle different types safely
-        if (typeof aValue === 'string' && typeof bValue === 'string') {
-          if (applicationSort.direction === 'asc') {
-            return aValue.localeCompare(bValue);
-          } else {
-            return bValue.localeCompare(aValue);
-          }
-        }
-        
-        if (typeof aValue === 'number' && typeof bValue === 'number') {
-          if (applicationSort.direction === 'asc') {
-            return aValue - bValue;
-          } else {
-            return bValue - aValue;
-          }
-        }
-        
-        return 0;
-      });
-    }
-
-    return filtered;
-  }, [jobApplications, applicationSearch, applicationSort]);
-
-  // Filter and sort job listings
-  // const filteredJobs = useMemo(() => {
-  //   let filtered = jobs.filter(job =>
-  //     job.title.toLowerCase().includes(jobSearch.toLowerCase()) ||
-  //     job.company.toLowerCase().includes(jobSearch.toLowerCase()) ||
-  //     job.location.toLowerCase().includes(jobSearch.toLowerCase())
-  //   );
-
-  //   if (jobSort.field && jobSort.direction) {
-  //     filtered.sort((a, b) => {
-  //       const aValue = a[jobSort.field as keyof JobListing];
-  //       const bValue = b[jobSort.field as keyof JobListing];
-
-  //       // Handle different types safely
-  //       if (typeof aValue === 'string' && typeof bValue === 'string') {
-  //         if (jobSort.direction === 'asc') {
-  //           return aValue.localeCompare(bValue);
-  //         } else {
-  //           return bValue.localeCompare(aValue);
-  //         }
-  //       }
-        
-  //       if (typeof aValue === 'number' && typeof bValue === 'number') {
-  //         if (jobSort.direction === 'asc') {
-  //           return aValue - bValue;
-  //         } else {
-  //           return bValue - aValue;
-  //         }
-  //       }
-        
-  //       return 0;
-  //     });
-  //   }
-
-  //   return filtered;
-  // }, [jobListings, jobSearch, jobSort]);
-
-  const handleSort = (field: string, table: 'applications' | 'jobs'): void => {
-    if (table === 'applications') {
-      setApplicationSort((prev: SortConfig) => ({
-        field,
-        direction: prev.field === field && prev.direction === 'asc' ? 'desc' : 'asc'
-      }));
-    } else {
-      setJobSort((prev: SortConfig) => ({
-        field,
-        direction: prev.field === field && prev.direction === 'asc' ? 'desc' : 'asc'
-      }));
-    }
-  };
-
-  const dbDateToRealDate = (dbDate: string) => {
-    return format(fromUnixTime(Number(dbDate)/1000), 'dd-mm-yyyy')
-  }
-
-  const handleApplicationSearchChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setApplicationSearch(event.target.value);
-  };
-
-  const handleJobSearchChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setJobSearch(event.target.value);
-  };
-
   const handleViewResume = (resume: string): void => {
     console.log('Viewing resume:', resume);
     // Add your view logic here
@@ -204,15 +67,6 @@ function Dashboard() {
   const handleDownloadResume = (resume: string): void => {
     console.log('Downloading resume:', resume);
     // Add your download logic here
-  };
-
-  const SortIcon: React.FC<SortIconProps> = ({ field, currentSort }) => {
-    if (currentSort.field !== field) {
-      return <ChevronUp className="sort-icon sort-icon-inactive" />;
-    }
-    return currentSort.direction === 'asc' ? 
-      <ChevronUp className="sort-icon sort-icon-active" /> : 
-      <ChevronDown className="sort-icon sort-icon-active" />;
   };
 
   return (
@@ -273,8 +127,6 @@ function Dashboard() {
               type="text"
               placeholder="Search applications..."
               className="search-input"
-              value={applicationSearch}
-              onChange={handleApplicationSearchChange}
             />
           </div>
         </div>
@@ -284,29 +136,23 @@ function Dashboard() {
               <tr>
                 <th 
                   className="sortable-header"
-                  onClick={() => handleSort('id', 'applications')}
                 >
                   <div className="header-content">
                     <span>ID</span>
-                    <SortIcon field="id" currentSort={applicationSort} />
                   </div>
                 </th>
                 <th 
                   className="sortable-header"
-                  onClick={() => handleSort('firstName', 'applications')}
                 >
                   <div className="header-content">
                     <span>First Name</span>
-                    <SortIcon field="firstName" currentSort={applicationSort} />
                   </div>
                 </th>
                 <th 
                   className="sortable-header"
-                  onClick={() => handleSort('lastName', 'applications')}
                 >
                   <div className="header-content">
                     <span>Last Name</span>
-                    <SortIcon field="lastName" currentSort={applicationSort} />
                   </div>
                 </th>
                 <th>Email</th>
@@ -314,18 +160,16 @@ function Dashboard() {
                 <th>Phone</th>
                 <th 
                   className="sortable-header"
-                  onClick={() => handleSort('jobPosition', 'applications')}
                 >
                   <div className="header-content">
                     <span>Job Position</span>
-                    <SortIcon field="jobPosition" currentSort={applicationSort} />
                   </div>
                 </th>
                 <th>Resume</th>
               </tr>
             </thead>
             <tbody>
-              {filteredApplications.map((app: JobApplication) => (
+              {jobApplications.map((app: JobApplication) => (
                 <tr key={app.id}>
                   <td>{app.id}</td>
                   <td>{app.firstName}</td>
@@ -374,87 +218,7 @@ function Dashboard() {
       </div>
 
         {/* Job Listings Table */}
-        <div className="data-table-container">
-          <div className="table-header">
-            <h2>Available Jobs</h2>
-            <div className="search-container">
-              <Search className="search-icon" />
-              <input
-                type="text"
-                placeholder="Search jobs..."
-                className="search-input"
-                value={jobSearch}
-                onChange={handleJobSearchChange}
-              />
-            </div>
-          </div>
-          <div className="table-wrapper">
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th 
-                    className="sortable-header"
-                    onClick={() => handleSort('id', 'jobs')}
-                  >
-                    <div className="header-content">
-                      <span>ID</span>
-                      <SortIcon field="id" currentSort={jobSort} />
-                    </div>
-                  </th>
-                  <th 
-                    className="sortable-header"
-                    onClick={() => handleSort('title', 'jobs')}
-                  >
-                    <div className="header-content">
-                      <span>Job Title</span>
-                      <SortIcon field="title" currentSort={jobSort} />
-                    </div>
-                  </th>
-                  <th 
-                    className="sortable-header"
-                    onClick={() => handleSort('company', 'jobs')}
-                  >
-                    <div className="header-content">
-                      <span>Location</span>
-                      <SortIcon field="company" currentSort={jobSort} />
-                    </div>
-                  </th>
-                  <th>Description</th>
-                  <th 
-                    className="sortable-header"
-                    onClick={() => handleSort('posted', 'jobs')}
-                  >
-                    <div className="header-content">
-                      <span>Posted</span>
-                      <SortIcon field="posted" currentSort={jobSort} />
-                    </div>
-                  </th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {jobs.map((job: Job) => (
-                  <tr key={job.id}>
-                    <td>{job.id}</td>
-                    <td className="job-title">{job.role}</td>
-                    <td>{job.location}</td>
-                    <td>
-                      <span className="job-type-badge">
-                        {job.description}
-                      </span>
-                    </td>
-                    <td>{dbDateToRealDate(job.creationDate)}</td>
-                    <td>
-                      <span className={`status-badge ${job.isArchived ? "inactive" : "active"}`}>
-                        {job.isArchived ? "Archived" : "Active"}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <JobTable />
       </div>
   )
 }
