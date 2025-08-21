@@ -45,7 +45,7 @@ interface SortIconProps {
 
 
 function Dashboard() {
-  const { loading, error, data } = useQuery(GET_JOBS);
+  const { data } = useQuery(GET_JOBS);
 
   const jobs: Job[] = data?.activeJobs || [];
 
@@ -91,9 +91,6 @@ function Dashboard() {
   const [jobSearch, setJobSearch] = useState<string>('');
   const [applicationSort, setApplicationSort] = useState<SortConfig>({ field: '', direction: '' });
   const [jobSort, setJobSort] = useState<SortConfig>({ field: '', direction: '' });
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
 
   // Filter and sort job applications
   const filteredApplications = useMemo(() => {
