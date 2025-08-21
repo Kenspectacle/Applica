@@ -439,7 +439,7 @@ button[type="submit"]:hover {
   color: #0f5132;
 }
 
-.status-badge.closed {
+.status-badge.inactive {
   background-color: #f8d7da;
   color: #721c24;
 }

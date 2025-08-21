@@ -7,13 +7,14 @@ import { CreateJobInput, UpdateJobInput } from './dto/create-job.input';
 export class JobsResolver {
   constructor(private readonly jobsService: JobsService) {}
 
-  @Query(() => [Job], { name: 'jobs' })
+  @Query(() => [Job], { name: 'allJobs' })
   async findAll(): Promise<Job[]> {
     return this.jobsService.findAll();
   }
 
   @Query(() => [Job], { name: 'activeJobs' })
   async findActive(): Promise<Job[]> {
+    console.log('fetching active jobs');
     return this.jobsService.findActive();
   }
 

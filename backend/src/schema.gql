@@ -8,11 +8,12 @@ type Job {
   location: String!
   description: String!
   isArchived: Boolean!
+  creationDate: String!
 }
 
 type Query {
   hello: String!
-  jobs: [Job!]!
+  allJobs: [Job!]!
   activeJobs: [Job!]!
   job(id: String!): Job!
   jobsByLocation(location: String!): [Job!]!

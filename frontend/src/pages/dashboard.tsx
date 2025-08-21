@@ -1,15 +1,17 @@
 import { Search, ChevronUp, ChevronDown, Eye, Download } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import { useQuery, gql } from '@apollo/client';
+import { format, fromUnixTime } from 'date-fns';
 
 const GET_JOBS = gql`
-  query GetJobs {
-    activeJobs {
+  query GetAllJobs {
+    allJobs {
       id
       role
       location
       description
       isArchived
+      creationDate
     }
   }
 `;
@@ -31,6 +33,7 @@ interface Job {
   location: string;
   description: string;
   isArchived: boolean;
+  creationDate: string;
 }
 
 interface SortConfig {
@@ -47,8 +50,8 @@ interface SortIconProps {
 function Dashboard() {
   const { data } = useQuery(GET_JOBS);
 
-  const jobs: Job[] = data?.activeJobs || [];
-
+  const jobs: Job[] = data?.allJobs || [];
+  console.log(jobs);
 
   // Sample data for job applications
   const [jobApplications] = useState([
@@ -181,6 +184,10 @@ function Dashboard() {
     }
   };
 
+  const dbDateToRealDate = (dbDate: string) => {
+    return format(fromUnixTime(Number(dbDate)/1000), 'dd-mm-yyyy')
+  }
+
   const handleApplicationSearchChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setApplicationSearch(event.target.value);
   };
@@ -197,14 +204,6 @@ function Dashboard() {
   const handleDownloadResume = (resume: string): void => {
     console.log('Downloading resume:', resume);
     // Add your download logic here
-  };
-
-  const formatDate = (dateString: string): string => {
-    try {
-      return new Date(dateString).toLocaleDateString();
-    } catch (error) {
-      return dateString; // Fallback to original string if parsing fails
-    }
   };
 
   const SortIcon: React.FC<SortIconProps> = ({ field, currentSort }) => {
@@ -416,13 +415,11 @@ function Dashboard() {
                     onClick={() => handleSort('company', 'jobs')}
                   >
                     <div className="header-content">
-                      <span>Company</span>
+                      <span>Location</span>
                       <SortIcon field="company" currentSort={jobSort} />
                     </div>
                   </th>
-                  <th>Location</th>
-                  <th>Type</th>
-                  <th>Salary</th>
+                  <th>Description</th>
                   <th 
                     className="sortable-header"
                     onClick={() => handleSort('posted', 'jobs')}
@@ -446,10 +443,10 @@ function Dashboard() {
                         {job.description}
                       </span>
                     </td>
-                    {/* <td>{formatDate(job.posted)}</td> */}
+                    <td>{dbDateToRealDate(job.creationDate)}</td>
                     <td>
-                      <span className={`status-badge ${job.isArchived}`}>
-                        {job.isArchived}
+                      <span className={`status-badge ${job.isArchived ? "inactive" : "active"}`}>
+                        {job.isArchived ? "Archived" : "Active"}
                       </span>
                     </td>
                   </tr>
