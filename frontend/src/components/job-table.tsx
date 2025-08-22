@@ -31,13 +31,51 @@ interface SortIconProps {
 }
 
 function JobTable() {
-    const { data } = useQuery(GET_JOBS);
+    const { data, refetch } = useQuery(GET_JOBS);
     const jobs: Job[] = data?.allJobs || [];
 
     const [jobSearch, setJobSearch] = useState<string>('');
     const [activeSortTab, setActiveSortTab] = useState<string>('');
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
+    const updateJobArchive = async (jobId: string, currentArchiveStatus: boolean) => {
+      const mutation = `
+          mutation UpdateJob($id: String!, $updateJobInput: UpdateJobInput!) {
+              updateJob(id: $id, updateJobInput: $updateJobInput) {
+                  id
+                  isArchived
+              }
+          }
+      `;
+  
+      const response = await fetch('http://localhost:3000/graphql', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              query: mutation,
+              variables: {
+                  id: jobId,
+                  updateJobInput: {
+                      isArchived: !currentArchiveStatus // Toggle the current status
+                  }
+              }
+          })
+      });
+  
+      if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const result = await response.json();
+      
+      if (result.errors) {
+          throw new Error(result.errors[0].message || 'GraphQL error occurred');
+      }
+  
+      return result.data.updateJob;
+  };
 
     const handleJobSearchChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         setJobSearch(event.target.value);
@@ -54,10 +92,17 @@ function JobTable() {
         }
     };
 
-    const handleToggleArchive = (jobId: string, isArchived: boolean): void => {
-      console.log('Toggle archive for job:', jobId, 'Current archived status:', isArchived);
-      // Add your toggle archive logic here
-    };
+    const handleToggleArchive = async (jobId: string, isArchived: boolean): Promise<void> => {
+      try {
+          await updateJobArchive(jobId, isArchived);
+          // Refetch the data to update the UI
+          await refetch();
+          console.log(`Job ${jobId} archive status toggled successfully`);
+      } catch (error) {
+          console.error('Error toggling archive status:', error);
+          alert('Failed to update job status. Please try again.');
+      }
+  };
 
     const handleDelete = (jobId: string): void => {
       console.log('Delete job:', jobId);
