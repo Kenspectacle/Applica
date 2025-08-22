@@ -1,7 +1,7 @@
 import { useQuery, gql } from '@apollo/client';
 import { useState, useMemo } from 'react';
 import { dbDateToRealDate } from '../utils/date-helpers';
-import { Search, ChevronUp, ChevronDown } from 'lucide-react';
+import { Search, ChevronUp, ChevronDown, Edit, Archive, ArchiveRestore, Trash2 } from 'lucide-react';
 
 const GET_JOBS = gql`
   query GetAllJobs {
@@ -53,6 +53,21 @@ function JobTable() {
         }
     };
 
+    const handleToggleArchive = (jobId: string, isArchived: boolean): void => {
+      console.log('Toggle archive for job:', jobId, 'Current archived status:', isArchived);
+      // Add your toggle archive logic here
+    };
+
+    const handleDelete = (jobId: string): void => {
+      console.log('Delete job:', jobId);
+      // Add your delete logic here
+    };
+
+    const handleEdit = (jobId: string): void => {
+      console.log('Edit job:', jobId);
+      // Add your edit logic here
+  };
+
     // Filtered and sorted jobs using useMemo for performance
     const filteredAndSortedJobs = useMemo(() => {
         let filtered = jobs.filter(job => {
@@ -75,14 +90,6 @@ function JobTable() {
                 let bValue2 = dbDateToRealDate(b.creationDate);
 
                 switch (activeSortTab) {
-                    case 'id':
-                        aValue = a.id;
-                        bValue = b.id;
-                        if (aValue === bValue) {
-                            aValue = aValue2
-                            bValue = bValue2
-                        } 
-                        break;
                     case 'title':
                         aValue = a.role;
                         bValue = b.role;
@@ -154,13 +161,9 @@ function JobTable() {
             <table className="data-table">
               <thead>
                 <tr>
-                  <th 
-                    className="sortable-header"
-                    onClick={() => handleSort('id')}
-                  >
+                  <th>
                     <div className="header-content">
-                      <span>ID</span>
-                      <SortIcon currentSortField="id" />
+                      <span>Actions</span>
                     </div>
                   </th>
                   <th 
@@ -197,7 +200,31 @@ function JobTable() {
               <tbody>
                 {filteredAndSortedJobs.map((job: Job) => (
                   <tr key={job.id}>
-                    <td>{job.id}</td>
+                    <td className="actions-cell">
+                      <div className="action-buttons">
+                        <button
+                          className="action-button edit-button"
+                          onClick={() => handleEdit(job.id)}
+                          title="Edit job"
+                        > Edit
+                          <Edit size={16} />
+                        </button>
+                        <button
+                          className="action-button archive-button"
+                          onClick={() => handleToggleArchive(job.id, job.isArchived)}
+                          title={job.isArchived ? "Unarchive job" : "Archive job"}
+                        > {job.isArchived ? "Unarchive job" : "Archive job"}
+                          {job.isArchived ? <ArchiveRestore size={16} /> : <Archive size={16} />}
+                        </button>
+                        <button
+                          className="action-button delete-button"
+                          onClick={() => handleDelete(job.id)}
+                          title="Delete job"
+                        > Delete
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    </td>
                     <td className="job-title">{job.role}</td>
                     <td>{job.location}</td>
                     <td>
