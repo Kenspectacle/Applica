@@ -109,11 +109,6 @@ function JobTable() {
       // Add your delete logic here
     };
 
-    const handleEdit = (jobId: string): void => {
-      console.log('Edit job:', jobId);
-      // Add your edit logic here
-  };
-
     // Filtered and sorted jobs using useMemo for performance
     const filteredAndSortedJobs = useMemo(() => {
         let filtered = jobs.filter(job => {
@@ -255,7 +250,6 @@ function JobTable() {
                         >
                           <button
                             className="action-button edit-button"
-                            onClick={() => handleEdit(job.id)}
                             title="Edit job"
                           > Edit
                             <Edit size={16} />
