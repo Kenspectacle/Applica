@@ -71,18 +71,34 @@ function JobTable() {
                 let aValue: any;
                 let bValue: any;
 
+                // secondary sort comparison value
+                let aValue2 = dbDateToRealDate(a.creationDate);
+                let bValue2 = dbDateToRealDate(b.creationDate);
+
                 switch (activeSortTab) {
                     case 'id':
                         aValue = a.id;
                         bValue = b.id;
+                        if (aValue === bValue) {
+                            aValue = aValue2
+                            bValue = bValue2
+                        } 
                         break;
                     case 'title':
                         aValue = a.role;
                         bValue = b.role;
+                        if (aValue === bValue) {
+                            aValue = aValue2
+                            bValue = bValue2
+                        }
                         break;
                     case 'location':
                         aValue = a.location;
                         bValue = b.location;
+                        if (aValue === bValue) {
+                            aValue = aValue2
+                            bValue = bValue2
+                        }
                         break;
                     case 'posted':
                         aValue = dbDateToRealDate(a.creationDate);
