@@ -50,7 +50,9 @@ export class JobsService {
 
   // Create a new job
   async create(jobData: Partial<Job>): Promise<Job> {
-    const job = this.jobsRepository.create(jobData);
+    const job = this.jobsRepository.create({
+      ...jobData,
+      creationDate: new Date(),});
     return this.jobsRepository.save(job);
   }
 

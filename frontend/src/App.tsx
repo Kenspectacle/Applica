@@ -6,6 +6,7 @@ import Dashboard from './pages/dashboard'
 import About from './pages/about'
 import Contact from './pages/contact'
 import Apply from './pages/apply'
+import NewJobPage from './pages/new-job'
 import { HelloGraphQL } from './components/HelloGraphQL'
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/apply" element={<Apply />} />
+          <Route path="/new-job" element={<NewJobPage />} />
           <Route path="/test-graphql" element={<HelloGraphQL />} />
         </Routes>
       </main>

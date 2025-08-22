@@ -43,6 +43,15 @@
   
 }
 
+.link-button{
+  background-color: #000;
+  
+}
+.link-button a {
+  color: #FFF;
+  
+}
+
 /* App Layout */
 .App {
   min-height: 100vh;

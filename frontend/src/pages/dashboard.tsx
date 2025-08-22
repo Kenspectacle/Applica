@@ -1,5 +1,6 @@
 import JobTable from '../components/job-table';
 import JobApplicationTable from '../components/job-application-table';
+import { Link } from 'react-router-dom'
 
 function Dashboard() {
   // Sample data for job applications
@@ -33,6 +34,11 @@ function Dashboard() {
       </div>
       <JobApplicationTable />
       <JobTable />
+      <button className="link-button">
+        <Link to="/new-job">
+          Add New Job
+        </Link>
+      </button>
     </div>
   )
 }
