@@ -628,3 +628,7 @@ small {
     padding: 1rem;
   }
 }
+
+  .action-button a {
+    color: black;
+  }

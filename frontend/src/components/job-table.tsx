@@ -2,6 +2,7 @@ import { useQuery, gql } from '@apollo/client';
 import { useState, useMemo } from 'react';
 import { dbDateToRealDate } from '../utils/date-helpers';
 import { Search, ChevronUp, ChevronDown, Edit, Archive, ArchiveRestore, Trash2 } from 'lucide-react';
+import { Link } from 'react-router-dom'
 
 const GET_JOBS = gql`
   query GetAllJobs {
@@ -202,13 +203,19 @@ function JobTable() {
                   <tr key={job.id}>
                     <td className="actions-cell">
                       <div className="action-buttons">
-                        <button
+                        <Link
+                          to={`/edit-job/${job.id}`}
                           className="action-button edit-button"
-                          onClick={() => handleEdit(job.id)}
                           title="Edit job"
-                        > Edit
-                          <Edit size={16} />
-                        </button>
+                        >
+                          <button
+                            className="action-button edit-button"
+                            onClick={() => handleEdit(job.id)}
+                            title="Edit job"
+                          > Edit
+                            <Edit size={16} />
+                          </button>
+                        </Link>
                         <button
                           className="action-button archive-button"
                           onClick={() => handleToggleArchive(job.id, job.isArchived)}
