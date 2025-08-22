@@ -27,7 +27,6 @@ interface Job {
 
 interface SortIconProps {
     currentSortField: string;
-    direction?: 'asc' | 'desc';
 }
 
 function JobTable() {
