@@ -77,6 +77,39 @@ function JobTable() {
       return result.data.updateJob;
   };
 
+  const deleteJob = async (jobId: string) => {
+    const mutation = `
+        mutation deleteJob($id: String!) {
+            deleteJob(id: $id)
+        }
+    `;
+
+    const response = await fetch('http://localhost:3000/graphql', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            query: mutation,
+            variables: {
+                id: jobId
+            }
+        })
+    });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    
+    if (result.errors) {
+        throw new Error(result.errors[0].message || 'GraphQL error occurred');
+    }
+
+    return result.data.deleteJob;
+};
+
     const handleJobSearchChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         setJobSearch(event.target.value);
       };
@@ -104,10 +137,26 @@ function JobTable() {
       }
   };
 
-    const handleDelete = (jobId: string): void => {
-      console.log('Delete job:', jobId);
-      // Add your delete logic here
-    };
+  const handleDelete = async (jobId: string): Promise<void> => {
+    // Show confirmation dialog
+    const isConfirmed = window.confirm(
+        'Are you sure you want to delete this job? This action cannot be undone.'
+    );
+    
+    if (!isConfirmed) {
+        return; // User cancelled
+    }
+    
+    try {
+        await deleteJob(jobId);
+        // Refetch the data to update the UI
+        await refetch();
+        console.log(`Job ${jobId} deleted successfully`);
+    } catch (error) {
+        console.error('Error deleting job:', error);
+        alert('Failed to delete job. Please try again.');
+    }
+};
 
     // Filtered and sorted jobs using useMemo for performance
     const filteredAndSortedJobs = useMemo(() => {
