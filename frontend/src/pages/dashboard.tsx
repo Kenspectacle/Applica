@@ -31,30 +31,9 @@ function Dashboard() {
           </div>
         </div>
       </div>
-      
-      <div className="recent-applications">
-        <h2>Recent Applications</h2>
-        <div className="application-list">
-          <div className="application-item">
-            <h4>Software Engineer - Tech Corp</h4>
-            <p>Applied: 2 days ago</p>
-            <p>Status: Under Review</p>
-          </div>
-          <div className="application-item">
-            <h4>Frontend Developer - Web Solutions</h4>
-            <p>Applied: 1 week ago</p>
-            <p>Status: Interview Scheduled</p>
-          </div>
-          <div className="application-item">
-            <h4>Full Stack Developer - Startup Inc</h4>
-            <p>Applied: 2 weeks ago</p>
-            <p>Status: Application Submitted</p>
-          </div>
-        </div>
-      </div>
-        <JobApplicationTable />
-        <JobTable />
-      </div>
+      <JobApplicationTable />
+      <JobTable />
+    </div>
   )
 }
 

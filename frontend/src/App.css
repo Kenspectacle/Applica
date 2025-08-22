@@ -197,29 +197,6 @@ button[type="submit"]:hover {
   margin: 0.5rem 0;
 }
 
-/* Application List */
-.application-list {
-  margin-top: 1rem;
-}
-
-.application-item {
-  background-color: #f8f9fa;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  border-radius: 8px;
-  border-left: 4px solid #3498db;
-}
-
-.application-item h4 {
-  margin: 0 0 0.5rem 0;
-  color: #2c3e50;
-}
-
-.application-item p {
-  margin: 0.25rem 0;
-  color: #7f8c8d;
-}
-
 /* Dashboard Layout Updates */
 .dashboard-page {
   background-color: #f8f9fa;
