@@ -652,3 +652,9 @@ small {
     margin-top: 10px;
     background-color: #0f5132;
   }
+
+  .error-message {
+    padding: 5px;
+    background-color: red;
+    color: white;
+  }

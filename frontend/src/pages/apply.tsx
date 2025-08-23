@@ -39,20 +39,14 @@ function Apply() {
     }))
   }
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null
-    setFormData(prev => ({
-      ...prev,
-      resume: file
-    }))
-  }
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     console.log('Application submitted:', formData)
     // Here you would typically send the data to your backend
     alert('Application submitted successfully!')
   }
+
+  const [fileError, setFileError] = useState('');
 
   return (
     <div className="apply-page">
@@ -138,10 +132,25 @@ function Apply() {
             id="resume"
             name="resume"
             accept=".pdf,.doc,.docx"
-            onChange={handleFileChange}
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              
+              if (file) {
+                if (file.size > 10 * 1024 * 1024) {
+                  e.target.value = '';
+                  setFileError('File size must be less than 10MB');
+                  return;
+                }
+                setFileError(''); // Clear error
+              }
+              
+              setFormData(prev => ({ ...prev, resume: file || null }));
+            }}
+            className={fileError ? 'error' : ''}
             required
           />
-          <small>Accepted formats: PDF, DOC, DOCX (Max 5MB)</small>
+          <small>Accepted formats: PDF, DOC, DOCX (Max 10MB)</small>
+          {fileError && <span className="error-message">{fileError}</span>}
         </div>
         
         <div className="form-group">
