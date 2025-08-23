@@ -1,18 +1,63 @@
 import { Search, ChevronUp, ChevronDown, Eye, Download } from 'lucide-react';
+import { useQuery, gql } from '@apollo/client';
 import { useState } from 'react';
+
+const GET_JOB_APPLICATIONS = gql`
+  query GetAllJobApplications {
+    jobApplications {
+    id
+    jobId
+    resumeId
+    firstName
+    lastName
+    phone
+    email
+    addressCountry
+    addressCity
+    addressPostalCode
+    addressStreet
+    addressStreetNumber
+    applicationStatus
+    createdAt
+    job {
+      id
+      role
+      location
+    }
+  }
+}
+`;
 
 interface JobApplication {
     id: number;
     firstName: string;
     lastName: string;
     email: string;
-    address: string;
+    addressCountry: string;
+    addressCity: string;
+    addressStreet: string;
+    addressStreetNumber: string;
     phone: string;
-    jobPosition: string;
+    jobId: string;
     resume: string;
-  }
+    job: Job;
+    applicationStatus: string;
+}
+
+interface Job {
+    id: string;
+    role: string;
+    location: string;
+    description: string;
+    isArchived: boolean;
+    creationDate: string;
+}
 
 function JobApplicationTable () {
+    const { data } = useQuery(GET_JOB_APPLICATIONS);
+    const jobApplications: JobApplication[] = data?.jobApplications || [];
+    console.log(jobApplications);
+
     const handleViewResume = (resume: string): void => {
         console.log('Viewing resume:', resume);
         // Add your view logic here
@@ -22,39 +67,6 @@ function JobApplicationTable () {
         console.log('Downloading resume:', resume);
         // Add your download logic here
       };
-
-    const [jobApplications] = useState([
-        {
-          id: 1,
-          firstName: 'John',
-          lastName: 'Doe',
-          email: 'john.doe@email.com',
-          address: '123 Main St, New York, NY',
-          phone: '+1 (555) 123-4567',
-          jobPosition: 'Software Engineer',
-          resume: 'john_doe_resume.pdf'
-        },
-        {
-          id: 2,
-          firstName: 'Jane',
-          lastName: 'Smith',
-          email: 'jane.smith@email.com',
-          address: '456 Oak Ave, Los Angeles, CA',
-          phone: '+1 (555) 987-6543',
-          jobPosition: 'Frontend Developer',
-          resume: 'jane_smith_resume.pdf'
-        },
-        {
-          id: 3,
-          firstName: 'Mike',
-          lastName: 'Johnson',
-          email: 'mike.j@email.com',
-          address: '789 Pine St, Chicago, IL',
-          phone: '+1 (555) 246-8135',
-          jobPosition: 'Full Stack Developer',
-          resume: 'mike_johnson_resume.pdf'
-        }
-      ]);
 
     return (<div className="data-table-container">
         <div className="table-header">
@@ -76,7 +88,7 @@ function JobApplicationTable () {
                   className="sortable-header"
                 >
                   <div className="header-content">
-                    <span>ID</span>
+                    <span>Status</span>
                   </div>
                 </th>
                 <th 
@@ -109,7 +121,7 @@ function JobApplicationTable () {
             <tbody>
               {jobApplications.map((app: JobApplication) => (
                 <tr key={app.id}>
-                  <td>{app.id}</td>
+                  <td>{app.applicationStatus}</td>
                   <td>{app.firstName}</td>
                   <td>{app.lastName}</td>
                   <td>
@@ -117,7 +129,7 @@ function JobApplicationTable () {
                       {app.email}
                     </a>
                   </td>
-                  <td className="address-cell">{app.address}</td>
+                  <td className="address-cell">{app.addressCity}, {app.addressCountry} </td>
                   <td>
                     <a href={`tel:${app.phone}`} className="phone-link">
                       {app.phone}
@@ -125,7 +137,7 @@ function JobApplicationTable () {
                   </td>
                   <td>
                     <span className="job-position-badge">
-                      {app.jobPosition}
+                      {app.job.role} | {app.job.location}
                     </span>
                   </td>
                   <td>
