@@ -27,7 +27,11 @@ function Apply() {
     email: '',
     phone: '',
     job: '',
-    resume: null as File | null
+    resume: null as File | null,
+    addressCountry: '',
+    addressCity: '',
+    addressStreet: '',
+    addressStreetNumber: ''
   })
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -51,11 +55,12 @@ function Apply() {
     <div className="apply-page">
       <h1>Job Application</h1>
       <p>Fill out the form below to submit your job application.</p>
+      <small>* is required</small>
       
       <form onSubmit={handleSubmit} className="application-form">
         
         <div className="form-group">
-          <label htmlFor="firstName">First Name *</label>
+          <label htmlFor="firstName">First Name*</label>
           <input
             type="text"
             id="firstName"
@@ -67,7 +72,7 @@ function Apply() {
         </div>
         
         <div className="form-group">
-          <label htmlFor="lastName">Last Name *</label>
+          <label htmlFor="lastName">Last Name*</label>
           <input
             type="text"
             id="lastName"
@@ -79,7 +84,7 @@ function Apply() {
         </div>
         
           <div className="form-group">
-            <label htmlFor="email">Email *</label>
+            <label htmlFor="email">Email*</label>
             <input
               type="email"
               id="email"
@@ -105,10 +110,59 @@ function Apply() {
               value={formData.phone}
               onChange={handleInputChange}
             />
+            <small>Optional</small>
           </div>
+
+           <div className="form-group">
+      <label htmlFor="addressCountry">Country Address*</label>
+      <input
+        type="text"
+        id="addressCountry"
+        name="addressCountry"
+        value={formData.addressCountry}
+        onChange={handleInputChange}
+        required
+      />
+    </div>
+    
+    <div className="form-group">
+      <label htmlFor="addressCity">City Address*</label>
+      <input
+        type="text"
+        id="addressCity"
+        name="addressCity"
+        value={formData.addressCity}
+        onChange={handleInputChange}
+        required
+      />
+    </div>
+    
+    <div className="form-group">
+      <label htmlFor="addressStreet">Street Address*</label>
+      <input
+        type="text"
+        id="addressStreet"
+        name="addressStreet"
+        value={formData.addressStreet}
+        onChange={handleInputChange}
+        required
+      />
+    </div>
+    
+    <div className="form-group">
+      <label htmlFor="addressStreetNumber">Street Number</label>
+      <input
+        type="text"
+        id="addressStreetNumber"
+        name="addressStreetNumber"
+        value={formData.addressStreetNumber}
+        onChange={handleInputChange}
+      />
+      <small>Optional</small>
+    </div>
           
           <div className="form-group">
-          <label htmlFor="job">Role</label>
+          <label htmlFor="job">Role*</label>
           <select
             id="job"
             name="job"
@@ -125,7 +179,7 @@ function Apply() {
         </div>
           
         <div className="form-group">
-          <label htmlFor="resume">Resume/CV *</label>
+          <label htmlFor="resume">Resume/CV*</label>
           <input
             type="file"
             id="resume"
@@ -160,7 +214,11 @@ function Apply() {
             email: '',
             phone: '',
             job: '',
-            resume: null
+            resume: null,
+            addressCountry: '',
+            addressCity: '',
+            addressStreet: '',
+            addressStreetNumber: ''
           })}>
             Reset Form
           </button>
