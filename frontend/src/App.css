@@ -635,4 +635,20 @@ small {
 
   .filter-container {
     text-align: left;
+    margin-bottom: 15px;
+  }
+
+  .filter-option {
+    margin-top: 10px;
+    margin-right: 10px;
+  }
+
+  .sub-filter-button {
+    margin-top: 10px;
+    background-color: #084298;
+  }
+
+  .sub-filter-option {
+    margin-top: 10px;
+    background-color: #0f5132;
   }
