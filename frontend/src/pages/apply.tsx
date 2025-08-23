@@ -93,6 +93,12 @@ function Apply() {
               name="email"
               value={formData.email}
               onChange={handleInputChange}
+              onBlur={(e) => {
+                const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.target.value);
+                e.target.setCustomValidity(
+                  !isValid && e.target.value ? 'Please enter a valid email address' : ''
+                );
+              }}
               required
             />
           </div>
