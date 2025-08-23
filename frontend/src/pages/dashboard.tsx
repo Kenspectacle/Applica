@@ -13,18 +13,31 @@ function Dashboard() {
       {/* Stats Overview */}
       <div className="stats-overview">
         <h2>Application Overview</h2>
-        <div className="stats-grid">
-          <div className="stat-card">
+        <div className="stat-card">
             <h3>Total Applications</h3>
             <p className="stat-number">24</p>
           </div>
+        <div className="stats-grid">
+          
           <div className="stat-card">
-            <h3>In Progress</h3>
+            <h3>Received</h3>
             <p className="stat-number">8</p>
           </div>
           <div className="stat-card">
-            <h3>Interviews</h3>
+            <h3>Review</h3>
             <p className="stat-number">3</p>
+          </div>
+          <div className="stat-card">
+            <h3>Interview</h3>
+            <p className="stat-number">13</p>
+          </div>
+          <div className="stat-card">
+            <h3>Offer</h3>
+            <p className="stat-number">13</p>
+          </div>
+          <div className="stat-card">
+            <h3>Hired</h3>
+            <p className="stat-number">13</p>
           </div>
           <div className="stat-card">
             <h3>Rejected</h3>
