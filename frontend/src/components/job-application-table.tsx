@@ -1,39 +1,13 @@
 import { Search, ChevronUp, ChevronDown, Eye, Download } from 'lucide-react';
-import { useQuery, gql } from '@apollo/client';
+
 import { useState } from 'react';
 import type { JobApplication } from '../types/JobApplication';
 
-const GET_JOB_APPLICATIONS = gql`
-  query GetAllJobApplications {
-    jobApplications {
-    id
-    jobId
-    resumeId
-    firstName
-    lastName
-    phone
-    email
-    addressCountry
-    addressCity
-    addressPostalCode
-    addressStreet
-    addressStreetNumber
-    applicationStatus
-    createdAt
-    job {
-      id
-      role
-      location
-    }
-  }
+interface JobApplicationTableProps {
+  jobApplications: JobApplication[];
 }
-`;
 
-
-
-function JobApplicationTable () {
-    const { data } = useQuery(GET_JOB_APPLICATIONS);
-    const jobApplications: JobApplication[] = data?.jobApplications || [];
+function JobApplicationTable ( {jobApplications}: JobApplicationTableProps) {
     console.log(jobApplications);
 
     const handleViewResume = (resume: string): void => {

@@ -1,51 +1,46 @@
 import JobTable from '../components/job-table';
 import JobApplicationTable from '../components/job-application-table';
+import StatsOverview from '../components/stats-overview';
 import { Link } from 'react-router-dom'
+import { useQuery, gql } from '@apollo/client';
+import type { JobApplication } from '../types/JobApplication';
+
+const GET_JOB_APPLICATIONS = gql`
+  query GetAllJobApplications {
+    jobApplications {
+    id
+    jobId
+    resumeId
+    firstName
+    lastName
+    phone
+    email
+    addressCountry
+    addressCity
+    addressPostalCode
+    addressStreet
+    addressStreetNumber
+    applicationStatus
+    createdAt
+    job {
+      id
+      role
+      location
+    }
+  }
+}
+`;
 
 function Dashboard() {
   // Sample data for job applications
-
+  const { data } = useQuery(GET_JOB_APPLICATIONS);
+  const jobApplications: JobApplication[] = data?.jobApplications || [];
   return (
     <div className="dashboard-page">
       <h1>Dashboard</h1>
       <p>Welcome to your job application dashboard!</p>
-      
-      {/* Stats Overview */}
-      <div className="stats-overview">
-        <h2>Application Overview</h2>
-        <div className="stat-card">
-            <h3>Total Applications</h3>
-            <p className="stat-number">24</p>
-          </div>
-        <div className="stats-grid">
-          
-          <div className="stat-card">
-            <h3>Received</h3>
-            <p className="stat-number">8</p>
-          </div>
-          <div className="stat-card">
-            <h3>Review</h3>
-            <p className="stat-number">3</p>
-          </div>
-          <div className="stat-card">
-            <h3>Interview</h3>
-            <p className="stat-number">13</p>
-          </div>
-          <div className="stat-card">
-            <h3>Offer</h3>
-            <p className="stat-number">13</p>
-          </div>
-          <div className="stat-card">
-            <h3>Hired</h3>
-            <p className="stat-number">13</p>
-          </div>
-          <div className="stat-card">
-            <h3>Rejected</h3>
-            <p className="stat-number">13</p>
-          </div>
-        </div>
-      </div>
-      <JobApplicationTable />
+      <StatsOverview jobApplications={jobApplications}/>
+      <JobApplicationTable jobApplications={jobApplications}/>
       <JobTable />
       <button className="link-button">
         <Link to="/new-job">
