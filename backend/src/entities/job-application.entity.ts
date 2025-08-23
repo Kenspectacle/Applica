@@ -25,7 +25,7 @@ export class JobApplication {
   @Field(() => ID)
   jobId: string;
 
-  @Column({ name: 'resume_URL', type: 'text' })
+  @Column({ name: 'resume_url', type: 'text' })
   @Field()
   resumeURL: string;
 
