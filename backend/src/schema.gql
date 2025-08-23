@@ -11,6 +11,32 @@ type Job {
   creationDate: String!
 }
 
+type JobApplication {
+  id: ID!
+  jobId: ID!
+  resumeId: ID
+  firstName: String!
+  lastName: String!
+  phone: String!
+  email: String!
+  addressCountry: String!
+  addressCity: String!
+  addressPostalCode: String!
+  addressStreet: String!
+  addressStreetNumber: String
+  applicationStatus: ApplicationStatus!
+  createdAt: String!
+  job: Job
+}
+
+enum ApplicationStatus {
+  RECEIVED
+  REVIEWING
+  INTERVIEW
+  REJECTED
+  ACCEPTED
+}
+
 type Query {
   hello: String!
   allJobs: [Job!]!
@@ -18,6 +44,9 @@ type Query {
   job(id: String!): Job!
   jobsByLocation(location: String!): [Job!]!
   searchJobs(roleKeyword: String!): [Job!]!
+  jobApplications: [JobApplication!]!
+  jobApplication(id: String!): JobApplication
+  jobApplicationsByJobId(jobId: String!): [JobApplication!]!
 }
 
 type Mutation {

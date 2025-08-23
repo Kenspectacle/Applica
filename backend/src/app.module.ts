@@ -10,7 +10,9 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { AppResolver } from './app.resolver';
 import { JobsModule } from './jobs/jobs.module';
+import { JobApplicationModule } from './job-applications/job-application.module';
 import { Job } from './entities/job.entity';
+import { JobApplication } from './entities/job-application.entity';
 
 
 @Module({
@@ -27,13 +29,14 @@ import { Job } from './entities/job.entity';
     TypeOrmModule.forRoot({
       type: 'postgres',
       url: process.env.DATABASE_URL,
-      entities: [Job],
+      entities: [Job, JobApplication],
       synchronize: false, // Set to false since your table already exists
       ssl: {
         rejectUnauthorized: false, // Neon requires this
       },
     }),
     JobsModule,
+    JobApplicationModule,
   ],
   controllers: [AppController, DatabaseController],
   providers: [AppService, DatabaseService, AppResolver],
