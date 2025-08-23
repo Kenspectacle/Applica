@@ -3,6 +3,7 @@ import { useState, useMemo } from 'react';
 import { dbDateToRealDate } from '../utils/date-helpers';
 import { Search, ChevronUp, ChevronDown, Edit, Archive, ArchiveRestore, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom'
+import type { Job } from '../types/Job';
 
 const GET_JOBS = gql`
   query GetAllJobs {
@@ -16,15 +17,6 @@ const GET_JOBS = gql`
     }
   }
 `;
-
-interface Job {
-    id: string;
-    role: string;
-    location: string;
-    description: string;
-    isArchived: boolean;
-    creationDate: string;
-}
 
 interface SortIconProps {
     currentSortField: string;

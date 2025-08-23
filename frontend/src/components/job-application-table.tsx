@@ -1,6 +1,7 @@
 import { Search, ChevronUp, ChevronDown, Eye, Download } from 'lucide-react';
 import { useQuery, gql } from '@apollo/client';
 import { useState } from 'react';
+import type { Job } from '../types/Job';
 
 const GET_JOB_APPLICATIONS = gql`
   query GetAllJobApplications {
@@ -42,15 +43,6 @@ interface JobApplication {
     resume: string;
     job: Job;
     applicationStatus: string;
-}
-
-interface Job {
-    id: string;
-    role: string;
-    location: string;
-    description: string;
-    isArchived: boolean;
-    creationDate: string;
 }
 
 function JobApplicationTable () {
