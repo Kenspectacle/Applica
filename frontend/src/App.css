@@ -632,3 +632,7 @@ small {
   .action-button a {
     color: black;
   }
+
+  .filter-container {
+    text-align: left;
+  }
