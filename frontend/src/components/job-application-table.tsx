@@ -1,6 +1,5 @@
 import { Search, ChevronUp, ChevronDown, Eye, Download } from 'lucide-react';
-
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import type { JobApplication } from '../types/JobApplication';
 
 interface JobApplicationTableProps {
@@ -8,7 +7,29 @@ interface JobApplicationTableProps {
 }
 
 function JobApplicationTable ( {jobApplications}: JobApplicationTableProps) {
-    console.log(jobApplications);
+    const [searchTerm, setSearchTerm] = useState<string>('');
+
+    // Filter applications based on search term
+    const filteredApplications = useMemo(() => {
+      if (!searchTerm.trim()) {
+        return jobApplications;
+      }
+
+      const lowercaseSearchTerm = searchTerm.toLowerCase().trim();
+      
+      return jobApplications.filter((app) => {
+        const fullName = `${app.firstName} ${app.lastName}`.toLowerCase();
+        const email = app.email.toLowerCase();
+        
+        return fullName.includes(lowercaseSearchTerm) || 
+               email.includes(lowercaseSearchTerm);
+      });
+    }, [jobApplications, searchTerm]);
+
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setSearchTerm(e.target.value);
+    };
+
 
     const handleViewResume = (resume: string): void => {
         console.log('Viewing resume:', resume);
@@ -27,8 +48,10 @@ function JobApplicationTable ( {jobApplications}: JobApplicationTableProps) {
             <Search className="search-icon" />
             <input
               type="text"
-              placeholder="Search applications..."
+              placeholder="Search by name or email..."  // CHANGED: More descriptive placeholder
               className="search-input"
+              value={searchTerm}                        // ADDED: Controlled input value
+              onChange={handleSearchChange}            // ADDED: Change handler
             />
           </div>
         </div>
@@ -71,7 +94,7 @@ function JobApplicationTable ( {jobApplications}: JobApplicationTableProps) {
               </tr>
             </thead>
             <tbody>
-              {jobApplications.map((app: JobApplication) => (
+              {filteredApplications.map((app: JobApplication) => (
                 <tr key={app.id}>
                   <td>{app.applicationStatus}</td>
                   <td>{app.firstName}</td>
@@ -114,6 +137,13 @@ function JobApplicationTable ( {jobApplications}: JobApplicationTableProps) {
                   </td>
                 </tr>
               ))}
+              {filteredApplications.length === 0 && searchTerm && (
+                <tr>
+                  <td colSpan={8} className="no-results">
+                    No applications found matching "{searchTerm}"
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
