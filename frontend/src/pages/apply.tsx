@@ -27,7 +27,6 @@ function Apply() {
     email: '',
     phone: '',
     job: '',
-    coverLetter: '',
     resume: null as File | null
   })
 
@@ -152,18 +151,6 @@ function Apply() {
           <small>Accepted formats: PDF, DOC, DOCX (Max 10MB)</small>
           {fileError && <span className="error-message">{fileError}</span>}
         </div>
-        
-        <div className="form-group">
-          <label htmlFor="coverLetter">Cover Letter</label>
-          <textarea
-            id="coverLetter"
-            name="coverLetter"
-            value={formData.coverLetter}
-            onChange={handleInputChange}
-            rows={6}
-            placeholder="Write your cover letter here..."
-          />
-        </div>
 
         <div className="form-actions">
           <button type="submit" className="submit-btn">Submit Application</button>
@@ -173,7 +160,6 @@ function Apply() {
             email: '',
             phone: '',
             job: '',
-            coverLetter: '',
             resume: null
           })}>
             Reset Form
