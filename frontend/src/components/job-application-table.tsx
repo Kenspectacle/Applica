@@ -158,7 +158,7 @@ function JobApplicationTable({ jobApplications }: JobApplicationTableProps) {
             onClick={() => setIsJobDropdownOpen(!isJobDropdownOpen)}
             type="button"
           >
-            {selectedJob || 'Select Job'}
+            {'Select Job'}
             <ChevronDown className={`chevron ${isJobDropdownOpen ? 'rotated' : ''}`} />
           </button>
 
@@ -186,7 +186,7 @@ function JobApplicationTable({ jobApplications }: JobApplicationTableProps) {
             onClick={() => setIsStatusDropdownOpen(!isStatusDropdownOpen)}
             type="button"
           >
-            {selectedStatus || 'Select Status'}
+            {'Select Status'}
             <ChevronDown className={`chevron ${isStatusDropdownOpen ? 'rotated' : ''}`} />
           </button>
 
