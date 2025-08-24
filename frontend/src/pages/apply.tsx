@@ -72,7 +72,7 @@ function Apply() {
           input: {
             firstName: formData.firstName,
             lastName: formData.lastName,
-            resumeURL: 'test',
+            resumeURL: resumeURL,
             email: formData.email,
             phone: formData.phone || null,
             jobId: formData.jobId,
@@ -123,7 +123,7 @@ function Apply() {
   // Get public URL
   const { data: urlData } = supabase
     .storage
-    .from("resumes")
+    .from("Resume Bucket")
     .getPublicUrl(fileName);
 
   resumeURL = urlData.publicUrl;
