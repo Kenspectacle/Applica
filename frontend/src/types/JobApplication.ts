@@ -11,7 +11,7 @@ export interface JobApplication {
     addressStreetNumber: string;
     phone: string;
     jobId: string;
-    resume: string;
+    resumeURL: string;
     job: Job;
     applicationStatus: string;
 }

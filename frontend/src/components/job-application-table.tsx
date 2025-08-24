@@ -65,10 +65,26 @@ function JobApplicationTable({ jobApplications }: JobApplicationTableProps) {
     // Add your view logic here
   };
 
-  const handleDownloadResume = (resume: string): void => {
-    console.log('Downloading resume:', resume);
-    // Add your download logic here
-  };
+  const handleDownloadResume = async (url: string) => {
+  try {
+    const response = await fetch(url, { mode: 'cors' }); // fetch the PDF
+    if (!response.ok) throw new Error('Network response was not ok');
+
+    const blob = await response.blob();                 // convert to blob
+    const blobUrl = window.URL.createObjectURL(blob);   // create temporary URL
+
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = url.split('/').pop() || 'resume.pdf'; // suggested filename
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    window.URL.revokeObjectURL(blobUrl); // clean up
+  } catch (error) {
+    console.error('Failed to download file:', error);
+  }
+};
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setSearchTerm(e.target.value);
@@ -289,7 +305,7 @@ function JobApplicationTable({ jobApplications }: JobApplicationTableProps) {
                   <div className="resume-actions">
                     <button
                       className="action-button view-button"
-                      onClick={() => handleViewResume(app.resume)}
+                      onClick={() => handleViewResume(app.resumeURL)}
                       type="button"
                     >
                       <Eye className="action-icon" />
@@ -297,7 +313,7 @@ function JobApplicationTable({ jobApplications }: JobApplicationTableProps) {
                     </button>
                     <button
                       className="action-button download-button"
-                      onClick={() => handleDownloadResume(app.resume)}
+                      onClick={() => handleDownloadResume(app.resumeURL)}
                       type="button"
                     >
                       <Download className="action-icon" />
