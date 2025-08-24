@@ -650,6 +650,7 @@ small {
   .sub-filter-option {
     margin-top: 10px;
     background-color: #0f5132;
+    margin-right: 10px;
   }
 
   .error-message {
