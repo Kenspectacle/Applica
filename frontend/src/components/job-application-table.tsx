@@ -2,6 +2,7 @@ import { Search, ChevronUp, ChevronDown, Eye, Download, Filter } from 'lucide-re
 
 import { useState, useMemo } from 'react';
 import type { JobApplication } from '../types/JobApplication';
+import { ResumeViewer } from './resumer-viewer';
 
 interface JobApplicationTableProps {
   jobApplications: JobApplication[];
@@ -15,6 +16,7 @@ function JobApplicationTable({ jobApplications }: JobApplicationTableProps) {
   const [isFilterDropdownOpen, setIsFilterDropdownOpen] = useState<boolean>(false);
   const [isJobDropdownOpen, setIsJobDropdownOpen] = useState<boolean>(false);
   const [isStatusDropdownOpen, setIsStatusDropdownOpen] = useState<boolean>(false);
+  const [viewingResume, setViewingResume] = useState<string | null>(null);
 
   console.log(jobApplications);
 
@@ -59,11 +61,6 @@ function JobApplicationTable({ jobApplications }: JobApplicationTableProps) {
 
     return filtered;
   }, [jobApplications, searchTerm, filterType, selectedJob, selectedStatus]);
-
-  const handleViewResume = (resume: string): void => {
-    console.log('Viewing resume:', resume);
-    // Add your view logic here
-  };
 
   const handleDownloadResume = async (url: string) => {
   try {
@@ -128,6 +125,17 @@ function JobApplicationTable({ jobApplications }: JobApplicationTableProps) {
   };
 
   return (<>
+    <div className="close-container">
+      {viewingResume && 
+        <button 
+          className="remove-viewing-resume"
+          onClick={() => setViewingResume(null)}
+        >Close Resume
+        </button>
+      }
+    </div>
+    
+    {viewingResume && <ResumeViewer url={viewingResume} />}
     <div className="filter-container">
       <button
         className="filter-button"
@@ -305,7 +313,7 @@ function JobApplicationTable({ jobApplications }: JobApplicationTableProps) {
                   <div className="resume-actions">
                     <button
                       className="action-button view-button"
-                      onClick={() => handleViewResume(app.resumeURL)}
+                      onClick={() => setViewingResume(app.resumeURL)}
                       type="button"
                     >
                       <Eye className="action-icon" />

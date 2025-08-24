@@ -661,3 +661,12 @@ small {
   .success-message {
     color: blue;
   }
+
+  .close-container {
+    text-align: left;
+    margin-bottom: 15px;
+  }
+
+  .remove-viewing-resume {
+    background-color: red;
+  }
