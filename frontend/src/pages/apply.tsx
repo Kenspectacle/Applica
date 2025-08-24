@@ -142,8 +142,10 @@ function Apply() {
       console.log(resumeURL);
       await createJobApplication(formData);
       setSubmitSuccess(true);
+      alert('successfully registered')
     } catch (error: any) {
       setSubmitError(error.message);
+      alert('registration failed');
     } finally {
       setSubmitting(false);
     }
