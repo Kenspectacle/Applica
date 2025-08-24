@@ -1,7 +1,8 @@
 // job-application.resolver.ts
-import { Resolver, Query, Args } from '@nestjs/graphql';
+import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { JobApplication } from '../entities/job-application.entity';
 import { JobApplicationService } from './job-application.service';
+import { CreateJobApplicationInput } from 'src/jobs/dto/job-application.input';
 
 @Resolver(() => JobApplication)
 export class JobApplicationResolver {
@@ -20,5 +21,12 @@ export class JobApplicationResolver {
   @Query(() => [JobApplication])
   async jobApplicationsByJobId(@Args('jobId') jobId: string): Promise<JobApplication[]> {
     return this.jobApplicationService.findByJobId(jobId);
+  }
+
+  @Mutation(() => JobApplication)
+  async createJobApplication(
+    @Args('input') input: CreateJobApplicationInput,
+  ): Promise<JobApplication> {
+    return this.jobApplicationService.create(input);
   }
 }
