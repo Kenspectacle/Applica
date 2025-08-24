@@ -449,6 +449,7 @@ button[type="submit"]:hover {
   text-decoration: none;
   font-family: inherit;
   background: transparent;
+  color: black;
 }
 
 .action-icon {
