@@ -10,7 +10,7 @@ const GET_JOB_APPLICATIONS = gql`
     jobApplications {
     id
     jobId
-    resumeId
+    resumeURL
     firstName
     lastName
     phone
